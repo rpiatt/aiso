@@ -1,0 +1,1 @@
+AISO (Artificially Intelligent System Operator) will become a digital twin of the U.S. electrical grid, capable of forecasting and reconciling energy generation and demand, and modeling next-generation methods of grid operation.
