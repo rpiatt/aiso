@@ -1,3 +1,5 @@
 .idea/
 .venv/
 **/*.pbf
+**/*.parquet
+**/.DS_Store
