@@ -3,3 +3,4 @@
 **/*.pbf
 **/*.parquet
 **/.DS_Store
+**/*.pkl
