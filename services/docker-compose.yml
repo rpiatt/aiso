@@ -1,0 +1,49 @@
+services:
+  db:
+    image: postgis/postgis:17-3.5-alpine
+    container_name: postgis
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: gis
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - ./pg_data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d gis"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+
+  pgadmin:
+    image: dpage/pgadmin4:8
+    container_name: pgadmin
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "5050:80"
+    depends_on:
+      - db
+
+
+  martin:
+    image: ghcr.io/maplibre/martin:1.1.0
+    restart: unless-stopped
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    environment:
+      # Martin reads this to connect to PostGIS
+      DATABASE_URL: postgres://postgres:password@db/db
+      # Helpful if any geometry columns have SRID=0
+      DEFAULT_SRID: 4326

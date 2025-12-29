@@ -12,6 +12,8 @@ waysGdf = waysGdf.set_crs(4326, allow_override=True)
 nodesGdf = nodesGdf.to_crs(epsg=3082)
 waysGdf = waysGdf.to_crs(epsg=3082)
 
+print('data loaded')
+
 # print(waysGdf.geometry.iloc[0].coords[:5])
 
 def snap(x, y, tol=0.1):
@@ -48,10 +50,18 @@ for _, row in waysGdf.iterrows():
             length=segment.length
         )
 
-    for node in G.nodes:
-        G.nodes[node]['x'] = node[0]
-        G.nodes[node]['y'] = node[1]
-        G.nodes[node]['geom'] = Point(node)
+print('edges graphed')
+
+#for node in G.nodes:
+#    G.nodes[node]['x'] = node[0]
+#    G.nodes[node]['y'] = node[1]
+#    G.nodes[node]['geom'] = Point(node)
+
+nx.set_node_attributes(G, {n: n[0] for n in G.nodes}, "x")
+nx.set_node_attributes(G, {n: n[1] for n in G.nodes}, "y")
+nx.set_node_attributes(G, {n: Point(n) for n in G.nodes}, "geom")
+
+print('node attributes set')
 
 
 print("Nodes:", G.number_of_nodes())
